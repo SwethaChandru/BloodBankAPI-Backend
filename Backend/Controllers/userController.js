@@ -166,7 +166,7 @@ module.exports.updateBloodSamples = (req, res) => {
                 }
                 else {
                     
-                    bloodSample.updateOne({ bloodSampleName: req.body.bloodSampleName, userid: ObjectId(decoded.id) },
+                    bloodSample.updateOne({ bloodSampleName: req.body.bloodSampleName, userid: decoded.id },
                         { $set: {unit: req.body.quantity } }, (err, docs) => {
                         if (err) {
                             res.status(401).json({
@@ -283,10 +283,7 @@ module.exports.bloodDetails = (req, res) => {
                     });
                 }
                 else {
-                    res.status(201).json({
-                        success: true,
-                        message: 'Blood Details retreived '
-                    });
+                    res.send(docs);
                 }
             }
         })
@@ -320,10 +317,7 @@ module.exports.allBloodSamples = (req, res) => {
             });
         }
         else {
-            res.status(201).json({
-                success: true,
-                message: 'All blood samples retreived'
-            });
+           res.send(docs);
         }
     });
 
