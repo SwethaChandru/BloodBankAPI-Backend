@@ -12,22 +12,26 @@ Features
 
 Clone the repository:
 
-bash
+```bash
 git clone https://github.com/SwethaChandru/BloodBankAPI-Backend.git
+```
 
 
 Navigate to the project directory:  
 
-bash
- cd BloodBankAPI-Backend/Backend       
+```bash
+ cd BloodBankAPI-Backend/Backend
+ ```
 
 Install the required packages:
-bash
+```bash
 npm install
+```
 
 Start the server:
-bash
+```bash
 npm start
+```
 
 
 
