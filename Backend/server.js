@@ -3,8 +3,7 @@ var express=require('express');
 const bodyparser=require('body-parser');
 const cors=require('cors');
 
-var app=express(); // intialize the express app
-
+var app=express(); 
 app.use(cors({}));
 app.use(bodyparser.json());
 app.use(bodyparser.urlencoded({ extended: true })); 
@@ -22,14 +21,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/Users', { useNewUrlParser: true,useu
     }
   });
 
-const uroute=require('./Routes/userRoute');
-app.use('/users',uroute);
+const userRoute=require('./Routes/userRoute');
+app.use('/users',userRoute);
 
-// const sroute=require('./Routes/bloodSampleRoute');
-// app.use('/samples',sroute);
-
-const rroute=require('./Routes/receiverRequestRoute');
-app.use('/receivers',rroute);
+const receiverRoute=require('./Routes/receiverRequestRoute');
+app.use('/receivers',receiverRoute);
 
 app.listen(PORT,()=>{
     console.log('server has been started at port:' +PORT);

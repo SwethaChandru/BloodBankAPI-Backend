@@ -1,9 +1,10 @@
 const mongoose=require('mongoose')
-
+var Schema = mongoose.Schema,
+    ObjectId = Schema.ObjectId;
 
 var bloodSampleSchema = mongoose.Schema({
     userid:{
-        type:Number
+        type:ObjectId
     },
     bloodSampleName:{
         type:String
