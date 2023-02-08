@@ -3,11 +3,8 @@ var router=express.Router();
 
 const userCon=require('../controllers/userController');
 
-// router.get('/',userCon.getUser);
-// router.put('/',userCon.updateUser);
-
-router.post('/signup',userCon.addUser); //signup
-router.post('/login',userCon.login); //login
+router.post('/signup', userCon.addUser);
+router.post('/login', userCon.login);
 
 router.post('/addBloodSamples',userCon.addBloodSamples);
 router.put('/updateBloodSamples',userCon.updateBloodSamples);

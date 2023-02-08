@@ -13,13 +13,16 @@ module.exports.addReceiver=(req,res)=>{
     newRequest.save((err,docs)=>{
         if(err)
         {
-            res.send(err);
+            res.status(401).json({
+                success: false,
+                message: 'DB error'
+            });
         }
         else
         {
             res.status(200).json({
                 success: true,
-                message: 'succesfully added blood samples'
+                message: 'succesfully added Receivers Request'
             });
         }
     })

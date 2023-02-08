@@ -5,58 +5,7 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 var ObjectId = require('mongoose').Types.ObjectId;
 
-// module.exports.getUser = (req, res) => {
-//     user.find({}, (err, docs) => {
-//         if (err) {
-//             res.status(401).json({
-//                 success: false,
-//                 message: 'DB error'
-//             });
-//         }
-//         else {
-//             if (docs === null) {
-//                 res.status(401).json({
-//                     success: false,
-//                     message: 'no books found'
-//                 });
-//             }
-//             else {
-//                 res.send(docs);
-//             }
-//         }
-//     })
-// }
-
-
-// module.exports.updateUser = (req, res) => {
-//     console.log("enter update User");
-//     user.findByIdAndUpdate({ _id: ObjectId(req.body.id) },
-//         {
-//             $set: {
-//                 "type": req.body.type, "username": req.body.username, "passwd": req.body.passwd, "name": req.body.name,
-//                 "mail": req.body.mail, "phonenum": req.body.phonenum, "address": req.body.address
-//             }
-//         },
-//         {
-//             upsert: true, new: true
-//         },
-//         function (err, docs) {
-//             if (err) {
-//                 console.log(err);
-//                 res.status(401).json({
-//                     success: false,
-//                     message: 'DB error'
-//                 });
-//             }
-//             else {
-//                 res.json(docs);
-//             }
-//         })
-// }
-
-
 module.exports.addUser = (req, res) => {
-    console.log("enter signup");
     user.findOne({ email: req.body.email }, (err, docs) => {
         if (err) {
             res.status(401).json({
@@ -134,7 +83,6 @@ module.exports.login = (req, res) => {
             }
         })
         .catch(err => {
-            console.log(err);
             return res.status(401).json({
                 success: false,
                 message: "Auth failed"
@@ -143,12 +91,10 @@ module.exports.login = (req, res) => {
 }
 
 module.exports.addBloodSamples = (req, res) => {
-    console.log("enter addBlood");
     const token = req.body.token;
     const secretKey = req.body.secretKey;
 
     const decoded = jwt.verify(token, secretKey);
-    console.log(decoded);
 
     if (decoded.type == "Hospital") {
         const newDetails = new bloodSample({
@@ -175,8 +121,6 @@ module.exports.addBloodSamples = (req, res) => {
 
 
 module.exports.updateBloodSamples = (req, res) => {
-    console.log("enter update blood");
-
     const token = req.body.token;
     const secretKey = req.body.secretKey;
 
@@ -192,7 +136,10 @@ module.exports.updateBloodSamples = (req, res) => {
             }
             else {
                 if (docs === null) {
-                    console.log("No blood sample data are present in this hospital name")
+                    res.status(401).json({
+                        success: false,
+                        message: 'No blood sample data are present in this hospital name'
+                    });
                 }
                 else {
                     
@@ -227,16 +174,11 @@ module.exports.updateBloodSamples = (req, res) => {
 }
 
 
-
-
-
 module.exports.deleteBloodSamples = (req, res) => {
-    console.log("delete blood sample")
     const token = req.body.token;
     const secretKey = req.body.secretKey;
 
     const decoded = jwt.verify(token, secretKey);
-    console.log(decoded);
 
     if (decoded.type == "Hospital") {
         bloodSample.find({ userid: ObjectId(decoded.id) }, (err, docs) => {
@@ -247,10 +189,11 @@ module.exports.deleteBloodSamples = (req, res) => {
                 });
             }
             else {
-                console.log("document");
-                console.log(docs);
                 if (docs === null) {
-                    console.log("no blood sample data are present in this hospital name")
+                    res.status(401).json({
+                        success: false,
+                        message: 'no blood samples found'
+                    });
                 }
                 else {
                     
@@ -285,13 +228,11 @@ module.exports.deleteBloodSamples = (req, res) => {
 }
 
 module.exports.bloodDetails = (req, res) => {
-    console.log("enter get blood details");
     const token = req.body.token;
     const secretKey = req.body.secretKey;
 
     const decoded = jwt.verify(token, secretKey);
-    console.log(decoded);
-
+  
     if (decoded.type == "Hospital") {
         bloodSample.find({ userid: decoded.id }, (err, docs) => {
             if (err) {
@@ -308,7 +249,10 @@ module.exports.bloodDetails = (req, res) => {
                     });
                 }
                 else {
-                    res.send(docs);
+                    res.status(201).json({
+                        success: true,
+                        message: 'Blood Details retreived '
+                    });
                 }
             }
         })
@@ -317,8 +261,7 @@ module.exports.bloodDetails = (req, res) => {
 }
 
 module.exports.allBloodSamples = (req, res) => {
-    console.log("get all blood samples");
-
+    
     bloodSample.aggregate([
         {
             $lookup:
@@ -331,20 +274,22 @@ module.exports.allBloodSamples = (req, res) => {
         }
     ]).exec((err, docs) => {
         if (err) {
-            console.log("error");
-            console.log(err);
-            res.send(err);
+            res.status(401).json({
+                success: false,
+                message: 'DB error'
+            });
         }
         else {
-            console.log("else");
-            res.send(docs);
+            res.status(201).json({
+                success: true,
+                message: 'All blood samples retreived'
+            });
         }
     });
 
 }
 
 module.exports.getReceiversRequest=(req,res)=>{
-    console.log("enter receivers request");
     const token = req.body.token;
     const secretKey = req.body.secretKey;
 
@@ -354,17 +299,18 @@ module.exports.getReceiversRequest=(req,res)=>{
         request.find({hospitalId:ObjectId(decoded.id)},(err,docs)=>{
             if(err)
             {
-                console.log("enter err");
-                console.log(err);
-                res.send(err);
+                res.status(401).json({
+                    success: false,
+                    message: 'DB error'
+                });
             }
             else
             {
-                console.log("enter success")
-                res.send(docs);
+                res.status(201).json({
+                    success: true,
+                    message:"Receivers Request details accept"
+                });
             }
         })
     }
-
-
 }
