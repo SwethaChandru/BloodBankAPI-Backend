@@ -1,7 +1,11 @@
 const request=require('../Models/receiverRequestModel');
 var ObjectId = require('mongoose').Types.ObjectId;
 
-
+/**
+ * To request a blood sample from Hospital 
+ * @param {JSON} req request(Blood sample and Hospital Details) sent from the client 
+ * @param {JSON} res success or failure response sent to the client
+ */
 module.exports.addReceiver=(req,res)=>{
     const newRequest=new request({
         status:req.body.status,

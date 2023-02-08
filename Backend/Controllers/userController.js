@@ -5,6 +5,12 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 var ObjectId = require('mongoose').Types.ObjectId;
 
+/**
+ * To create an account By Hospital and Receiver
+ * @param {JSON} req request(register Details) sent from the client .
+ * @param {JSON} res success or failure response sent to the client.
+ */
+
 module.exports.addUser = (req, res) => {
     user.findOne({ email: req.body.email }, (err, docs) => {
         if (err) {
@@ -51,6 +57,13 @@ module.exports.addUser = (req, res) => {
     })
 }
 
+
+/**
+ * to login an account By Hospital and Receiver
+ * @param {JSON} req request(login Details) sent from the client 
+ * @param {JSON} res success or failure response sent to the client.
+ */
+
 module.exports.login = (req, res) => {
     let fetchedUser;
     user.findOne({ email: req.body.email }).then(user => {
@@ -90,6 +103,11 @@ module.exports.login = (req, res) => {
         });
 }
 
+/**
+ * To add the blood sample information
+ * @param {JSON} req request(Blood sample details and Hospital id) sent from the client 
+ * @param {JSON} res success or failure response sent to the client.
+ */
 module.exports.addBloodSamples = (req, res) => {
     const token = req.body.token;
     const secretKey = req.body.secretKey;
@@ -119,6 +137,11 @@ module.exports.addBloodSamples = (req, res) => {
     }
 }
 
+/**
+ * To update the respective blood information
+ * @param {JSON} req request(Blood sample details and Hospital id) sent from the client 
+ * @param {JSON} res success or failure response sent to the client
+ */
 
 module.exports.updateBloodSamples = (req, res) => {
     const token = req.body.token;
@@ -173,7 +196,11 @@ module.exports.updateBloodSamples = (req, res) => {
     }
 }
 
-
+/**
+ * To delete the respective blood information
+ * @param {JSON} req request(Blood sample detaila and Hospital idea) sent from the client 
+ * @param {JSON} res success or failure response sent to the client.
+ */
 module.exports.deleteBloodSamples = (req, res) => {
     const token = req.body.token;
     const secretKey = req.body.secretKey;
@@ -227,6 +254,13 @@ module.exports.deleteBloodSamples = (req, res) => {
     }
 }
 
+
+/**
+ * To get all the blood info that the hospital uploaded 
+ * @param {*} req request(Hopsital id ) sent from the client 
+ * @param {*} res success or failure response(Blood sample details of the hospital) sent to the client.
+ */
+
 module.exports.bloodDetails = (req, res) => {
     const token = req.body.token;
     const secretKey = req.body.secretKey;
@@ -260,6 +294,12 @@ module.exports.bloodDetails = (req, res) => {
 
 }
 
+/**
+ * list of all blood samples available in all hospitals 
+ * @param {*} req request sent from the client 
+ * @param {*} res success or failure response(Blood sample Details) sent to the client.
+ */
+
 module.exports.allBloodSamples = (req, res) => {
     
     bloodSample.aggregate([
@@ -288,6 +328,12 @@ module.exports.allBloodSamples = (req, res) => {
     });
 
 }
+
+/**
+ * To get the list of all receivers who have requested a particular blood group from its blood bank.
+ * @param {*} req request sent from the client 
+ * @param {*} res success or failure response(receivers's request) sent to the client.
+ */
 
 module.exports.getReceiversRequest=(req,res)=>{
     const token = req.body.token;
